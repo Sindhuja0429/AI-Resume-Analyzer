@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer | Enterprise Gateway</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-glow: #38bdf8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #0369a1 100%);
+            --border-color: rgba(148, 163, 184, 0.1);
+            --focus-ring: rgba(56, 189, 248, 0.25);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gateway-container {
+            width: 100%;
+            max-width: 680px;
+            background-color: var(--bg-surface);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-sizing: border-box;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+        }
+
+        /* Premium Upload Box styling */
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            background: #0b0f19;
+            border: 2px dashed #334155;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--accent-glow);
+            background: rgba(56, 189, 248, 0.02);
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--accent-glow);
+        }
+
+        .upload-text {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin: 0 0 4px 0;
+        }
+
+        .upload-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* High-tech text area fields */
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            background-color: #0b0f19;
+            color: var(--text-main);
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 0 4px var(--focus-ring);
+        }
+
+        /* Glowing Submission Action Trigger */
+        button {
+            width: 100%;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(2, 132, 199, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(2, 132, 199, 0.4);
+            opacity: 0.95;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gateway-container">
+        <header>
+            <h1>AI Resume Analyzer</h1>
+            <p class="subtitle">Evaluate and score technical resumes against live job requirements with deep context analytics.</p>
+        </header>
+        
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Document Target</label>
+                <div class="file-upload-wrapper">
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-text">Click to explore or drop profile document</p>
+                    <p class="upload-hint">Supports premium .pdf or .docx data assets</p>
+                    <input type="file" name="resume" accept=".pdf,.docx" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Job Description Context Matrix</label>
+                <textarea name="job_description" rows="6" placeholder="Paste comprehensive structural performance tracking metrics or standard role details here..." required></textarea>
+            </div>
+
+            <button type="submit">Execute Match Optimization</button>
+        </form>
+    </div>
+
+</body>
+</html>

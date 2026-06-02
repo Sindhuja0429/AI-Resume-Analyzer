@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Dashboard | AI Resume Analyzer</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-glow: #38bdf8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #0369a1 100%);
+            --border-color: rgba(148, 163, 184, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 1000px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .meta-tag {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            display: inline-block;
+        }
+
+        /* Responsive Grid Structure */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: var(--bg-surface);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 28px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(56, 189, 248, 0.05);
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            margin: 0 0 20px 0;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Premium Circular & Linear Metric Mix */
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            min-height: 200px;
+        }
+
+        .score-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent-glow);
+            line-height: 1;
+            margin-bottom: 16px;
+            text-shadow: 0 0 20px rgba(32, 159, 214, 0.2);
+        }
+
+        .progress-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 300px;
+            height: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-bar {
+            background: var(--accent-gradient);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Pill Badge Grid Items */
+        .skills-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .skill-pill {
+            background: rgba(56, 189, 248, 0.06);
+            color: var(--accent-glow);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .skill-pill:hover {
+            background: var(--accent-gradient);
+            color: #fff;
+            border-color: transparent;
+            transform: scale(1.03);
+        }
+
+        /* Clean Monospace Terminal for Document Viewer */
+        pre {
+            background: #0b0f19;
+            color: #cbd5e1;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            max-height: 350px;
+            overflow-y: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* Custom Scrollbars */
+        pre::-webkit-scrollbar { width: 8px; }
+        pre::-webkit-scrollbar-track { background: transparent; }
+        pre::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+        .btn-action {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <header>
+            <h1>Analysis Dashboard</h1>
+            <div class="meta-tag">📄 File Tracked: <strong>{{ filename }}</strong></div>
+        </header>
+
+        <div class="grid-layout">
+            <div class="card">
+                <h3>Target Match Index</h3>
+                <div class="score-container">
+                    <div class="score-display">{{ score }}%</div>
+                    <div class="progress-track">
+                        <div class="progress-bar" style="width: {{ score }}%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Identified Matrix Keywords</h3>
+                {% if skills %}
+                    <ul class="skills-flex">
+                    {% for skill in skills %}
+                        <li class="skill-pill">{{ skill }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">No core requirement vectors identified inside document matrix context.</p>
+                {% endif %}
+            </div>
+
+            <div class="card card-full">
+                <h3>Extracted Stream Contents</h3>
+                <pre>{{ text }}</pre>
+            </div>
+        </div>
+
+        <a href="/" class="btn-action">← Return to Stream</a>
+    </div>
+
+</body>
+</html>
